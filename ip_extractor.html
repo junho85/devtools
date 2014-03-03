@@ -39,18 +39,31 @@ footer {
 <script>
 function extract() {
 	var src = jQuery("#src").val();
-	var result = extractIPAddress(src);
+	var is_inline = jQuery("#inline").val();
+
+	var result = extractIPAddress(src, is_inline);
+
 	jQuery("#dst").val(result);
 }
 
-function extractIPAddress(str) {
+function extractIPAddress(str, is_inline) {
 	var match = str.match(/(\d{1,3}\.){3}\d{1,3}/g);
 
 	var result = "";
+	var is_first = true;
 	if (match) {
 		match.forEach(function(entry) {
-				result += entry + "\n";
-				});
+				if (is_first) {
+					result += entry;
+					is_first = false;
+				} else {
+					result += "\n" + entry;
+				}
+			});
+	}
+
+	if (is_inline) {
+		result = result.split("\n").join(",");
 	}
 	return result;
 }
@@ -86,7 +99,10 @@ function extractIPAddress(str) {
 	<h1>IP extractor</h1>
 	<p class="lead">get IP addresses from string</p>
 	<textarea id="src" class="src-box"></textarea>
+	<div>
+	<input type="checkbox" id="inline" name="inline">inline(,)</input><br />
 	<input type="button" value="extract" onclick="extract()" />
+	</div>
 
 	<textarea id="dst" class="dst-box" readonly="readonly"></textarea>
 
