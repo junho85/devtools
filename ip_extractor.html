@@ -39,7 +39,7 @@ footer {
 <script>
 function extract() {
 	var src = jQuery("#src").val();
-	var is_inline = jQuery("#inline").val();
+	var is_inline = jQuery("#inline").is(":checked");
 
 	var result = extractIPAddress(src, is_inline);
 
